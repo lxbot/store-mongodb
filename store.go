@@ -45,7 +45,7 @@ func Get(key string) interface{} {
 
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	result := collection.FindOne(ctx, filter)
-	m := map[string]interface{}{}
+	m := M{}
 	_ = result.Decode(&m)
 
 	return m["value"]
