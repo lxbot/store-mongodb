@@ -24,7 +24,8 @@ func Boot(c *chan M) {
 		panic(err)
 	}
 	collection = client.Database("lxbot").Collection("store")
-	// TODO: create index
+
+	_, _ = collection.Indexes().CreateOne(context.TODO(), mongo.IndexModel{Keys: bson.M{"key": 1}, Options: nil})
 }
 
 func Set(key string, value interface{}) {
