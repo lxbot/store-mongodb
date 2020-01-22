@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -31,14 +32,18 @@ func Boot(c *chan M) {
 func Set(key string, value interface{}) {
 	filter := bson.M{"key": key}
 	update := bson.M{
-		"key": key,
-		"value": value,
+		"$set": bson.M{
+			"key": key,
+			"value": value,
+		},
 	}
 	upsert := true
 	option := options.UpdateOptions{Upsert: &upsert}
 
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	_, _ = collection.UpdateOne(ctx, filter, update, &option)
+	if _, err := collection.UpdateOne(ctx, filter, update, &option); err != nil {
+		fmt.Printf("%v", err)
+	}
 }
 
 func Get(key string) interface{} {
