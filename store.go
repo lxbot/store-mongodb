@@ -26,7 +26,8 @@ func Boot(c *chan M) {
 	}
 	collection = client.Database("lxbot").Collection("store")
 
-	_, _ = collection.Indexes().CreateOne(context.TODO(), mongo.IndexModel{Keys: bson.M{"key": 1}, Options: nil})
+	t := true
+	_, _ = collection.Indexes().CreateOne(context.TODO(), mongo.IndexModel{Keys: bson.M{"key": 1}, Options: &options.IndexOptions{Background: &t, Unique: &t}})
 }
 
 func Set(key string, value interface{}) {
